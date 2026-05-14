@@ -6,24 +6,50 @@ public class MapDataDrawer
 {
 
   private int[][] grid;
+  private int minValue, maxValue;
 
   public MapDataDrawer(String filename, int rows, int cols){
-      // initialize grid 
+      // initialize grid
+      grid = new int[rows][cols];
       //read the data from the file into the grid
-      
+      Scanner scan = null;
+      try {
+          scan = new Scanner(new File("Colorado_840x480.dat"));
+      } catch (FileNotFoundException e) {
+          throw new RuntimeException(e);
+      }
+      // Read data in row-major order, accounting for the lack of line breaks
+      for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            if (scan.hasNextInt())
+                grid[row][col] = scan.nextInt();
+        }
+      }
   }
   
   /**
    * @return the min value in the entire grid
    */
   public int findMinValue(){
-    return -1;    
+      int min = grid[0][0];
+      for (int row = 0; row < grid.length; row++) {
+          for (int col = 0; col < grid[0].length; col++) {
+              if (grid[row][col] < min) min = grid[row][col];
+          }
+      }
+      return min;
   }
   /**
    * @return the max value in the entire grid
    */
   public int findMaxValue(){
-      return -1;
+      int max = grid[0][0];
+      for (int row = 0; row < grid.length; row++) {
+          for (int col = 0; col < grid[0].length; col++) {
+              if (grid[row][col] > max) max = grid[row][col];
+          }
+      }
+      return max;
   }
   
   /**
@@ -31,7 +57,7 @@ public class MapDataDrawer
    * @return the index of the row with the lowest value in the given col for the grid
    */
   public  int indexOfMinInCol(int col){
-  
+
       return -1;
   }
   
@@ -40,10 +66,10 @@ public class MapDataDrawer
    * Colors should be grayscale values 0-255, scaled based on min/max values in grid
    */
   public void drawMap(Graphics g){
-      
-      
-      
-      
+
+
+
+
   }
 
    /**
