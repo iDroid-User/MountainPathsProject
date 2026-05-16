@@ -6,7 +6,6 @@ public class MapDataDrawer
 {
 
   private int[][] grid;
-  private int minValue, maxValue;
 
   public MapDataDrawer(String filename, int rows, int cols){
       // initialize grid
@@ -33,7 +32,7 @@ public class MapDataDrawer
   public int findMinValue(){
       int min = grid[0][0];
       for (int row = 0; row < grid.length; row++) {
-          for (int col = 0; col < grid[0].length; col++) {
+          for (int col = 0; col < grid[row].length; col++) {
               if (grid[row][col] < min) min = grid[row][col];
           }
       }
@@ -45,7 +44,7 @@ public class MapDataDrawer
   public int findMaxValue(){
       int max = grid[0][0];
       for (int row = 0; row < grid.length; row++) {
-          for (int col = 0; col < grid[0].length; col++) {
+          for (int col = 0; col < grid[row].length; col++) {
               if (grid[row][col] > max) max = grid[row][col];
           }
       }
@@ -66,15 +65,22 @@ public class MapDataDrawer
    * Colors should be grayscale values 0-255, scaled based on min/max values in grid
    */
   public void drawMap(Graphics g){
+    int min = findMinValue(); // Darkest shade
+    int max = findMaxValue(); // Brightest shade
+    int scale = (max + 255 - 1) / 255; // Scale elevation data to grayscale range (0-255) using ceiling division
 
-
-
-
+    for (int row = 0; row < grid.length; row++) {
+        for (int col = 0; col < grid[row].length; col++) {
+            int c = grid[row][col] / scale % 255; // Calculate grayscale value
+            g.setColor(new Color(c,c,c));
+            g.fillRect(col,row,1,1); // Graphics are drawn in column-major order as 1x1 filled rectangles
+        }
+    }
   }
 
    /**
    * Find a path from West-to-East starting at given row.
-   * Choose a foward step out of 3 possible forward locations, using greedy method described in assignment.
+   * Choose a forward step out of 3 possible forward locations, using greedy method described in assignment.
    * @return the total change in elevation traveled from West-to-East
    */
   public int drawLowestElevPath(Graphics g, int row){
