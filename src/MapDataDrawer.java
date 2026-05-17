@@ -2,8 +2,7 @@ import java.util.*;
 import java.io.*;
 import java.awt.*;
 
-public class MapDataDrawer
-{
+public class MapDataDrawer {
 
   private int[][] grid;
 
@@ -29,7 +28,7 @@ public class MapDataDrawer
   /**
    * @return the min value in the entire grid
    */
-  public int findMinValue(){
+  public int findMinValue() {
       int min = grid[0][0];
       for (int row = 0; row < grid.length; row++) {
           for (int col = 0; col < grid[row].length; col++) {
@@ -41,7 +40,7 @@ public class MapDataDrawer
   /**
    * @return the max value in the entire grid
    */
-  public int findMaxValue(){
+  public int findMaxValue() {
       int max = grid[0][0];
       for (int row = 0; row < grid.length; row++) {
           for (int col = 0; col < grid[row].length; col++) {
@@ -55,16 +54,22 @@ public class MapDataDrawer
    * @param col the column of the grid to check
    * @return the index of the row with the lowest value in the given col for the grid
    */
-  public  int indexOfMinInCol(int col){
-
-      return -1;
+  public  int indexOfMinInCol(int col) {
+      int lowestRowIdx = 0, lowestValue = grid[0][col];
+      for (int row = 0; row < grid.length; row++) {
+          if (grid[row][col] < lowestValue) {
+              lowestValue = grid[row][col];
+              lowestRowIdx = row;
+          }
+      }
+      return lowestRowIdx;
   }
   
   /**
    * Draws the grid using the given Graphics object.
    * Colors should be grayscale values 0-255, scaled based on min/max values in grid
    */
-  public void drawMap(Graphics g){
+  public void drawMap(Graphics g) {
     int min = findMinValue(); // Darkest shade
     int max = findMaxValue(); // Brightest shade
 
@@ -87,8 +92,6 @@ public class MapDataDrawer
       int totalElevChange = 0;
       // Loops through every possible column across the map
       for (int col = 0; col < grid[row].length; col++) {
-          // Starting from the given row, color it green
-          g.setColor(new Color(0,255,0));
           g.fillRect(col,row,1,1);
 
           if (col == grid[row].length - 1) return totalElevChange; // Guard clause
@@ -129,10 +132,17 @@ public class MapDataDrawer
   /**
    * @return the index of the starting row for the lowest-elevation-change path in the entire grid.
    */
-  public int indexOfLowestElevPath(Graphics g){
-     return -1;
-  
+  public int indexOfLowestElevPath(Graphics g) {
+      int startRowIdx = 0;
+      int lowestElevChange = drawLowestElevPath(g, 0);
+      // Loop through every possible starting row and call drawLowestElevPath() to find the lowest route
+      for (int row = 1; row < grid.length; row++) {
+          int elevChange = drawLowestElevPath(g, row);
+          if (lowestElevChange > elevChange) {
+              lowestElevChange = elevChange;
+              startRowIdx = row;
+          }
+      }
+      return startRowIdx;
   }
-  
-  
 }

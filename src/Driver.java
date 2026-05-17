@@ -35,7 +35,7 @@ public class Driver {
         g.setColor(Color.RED);
         int bestRow = map.indexOfLowestElevPath(g);
 
-        // map.drawMap(g); //use this to get rid of all red lines
+        map.drawMap(g); //use this to get rid of all red lines
         g.setColor(Color.GREEN); // set brush to green for drawing best path
         totalChange = map.drawLowestElevPath(g, bestRow);
         System.out.println("The Lowest-Elevation-Change Path starts at row: " + bestRow
